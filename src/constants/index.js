@@ -1,7 +1,7 @@
-const NAME_PATTER = /[A-Z][a-z]{0,255}/;
+const NAME_PATTERN = /^[A-Z][a-z]{0,255}$/;
 const SALT_ROUND = 6;
 
 module.exports = {
-  NAME_PATTER,
+  NAME_PATTERN,
   SALT_ROUND
 };
