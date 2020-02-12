@@ -5,7 +5,12 @@ class UserController {
   createUser = async (req, res, next) => {
     try {
       const createdUser = await User.create( req.body );
-      res.send( createdUser );
+      if (createdUser) {
+        const data = createdUser.get();
+        delete data.password;
+        return res.send( data );
+      }
+      return res.status( 400 ).send( 'Bad request' );
     } catch (e) {
       return res.status( 400 ).send( 'Bad request' );
     }
@@ -13,7 +18,6 @@ class UserController {
 
   deleteUser = async (req, res, next) => {
     try {
-
       const deletedRowsCount = await User.destroy( {
                                                      where: {
                                                        id: req.params.id
@@ -32,7 +36,11 @@ class UserController {
 
   getUser = async (req, res, next) => {
     try {
-      const user = await User.findByPk( req.params.id );
+      const user = await User.findByPk( req.params.id, {
+        attributes: {
+          exclude: ['password'],
+        }
+      } );
       if (user) {
         return res.send( user );
       }
@@ -50,9 +58,10 @@ class UserController {
         },
         returning: true,
       } );
-      debugger;
       if (updatedRowsCount) {
-        return res.send( updatedRows[0].get() );
+        const data = updatedRows[0].get();
+        delete data.password;
+        return res.send( data );
       }
       return res.status( 404 ).send( 'Error 404: User not found' );
 
