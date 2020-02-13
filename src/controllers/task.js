@@ -1,13 +1,15 @@
 const { Task } = require( './../models' );
+const Controller = require( './../utils/controller' );
 
 class TaskController {
 
+  constructor () {
+    this._controller = new Controller( Task );
+  }
+
   createTask = async (req, res, next) => {
     try {
-      debugger;
-      req.body.userId = req.headers.authorization;
-      const createdTask = await Task.create( req.body );
-      res.send( createdTask );
+      res.send( await this._controller.create( req.body ) );
     } catch (e) {
       return res.status( 400 ).send( e );
     }
@@ -15,18 +17,9 @@ class TaskController {
 
   deleteTask = async (req, res, next) => {
     try {
-
-      const deletedRowsCount = await Task.destroy( {
-                                                     where: {
-                                                       id: req.params.id
-                                                     }
-                                                   } );
-      if (deletedRowsCount) {
-        return res.send( 'Task has been deleted' );
-      }
-
-      return res.status( 404 ).send( 'Error 404: Task not found' );
-
+      res.send( {
+                  isDeleted: (await this._controller.delete( req.params.id )) === '1'
+                } );
     } catch (e) {
       return res.status( 400 ).send( 'Bad request' );
     }
@@ -34,11 +27,7 @@ class TaskController {
 
   getTask = async (req, res, next) => {
     try {
-      const Task = await Task.findByPk( req.params.id );
-      if (Task) {
-        return res.send( Task );
-      }
-      return res.status( 404 ).send( 'Error 404: Task not found' );
+      res.send( await this._controller.read( req.params.id ) );
     } catch (e) {
       return res.status( 400 ).send( 'Bad request' );
     }
@@ -46,17 +35,8 @@ class TaskController {
 
   updateTask = async (req, res, next) => {
     try {
-      const [updatedRowsCount, updatedRows] = await Task.update( req.body, {
-        where: {
-          id: req.params.id
-        },
-        returning: true,
-      } );
-      debugger;
-      if (updatedRowsCount) {
-        return res.send( updatedRows[0].get() );
-      }
-      return res.status( 404 ).send( 'Error 404: Task not found' );
+
+      res.send( await this._controller.update( req.params.id, req.body ) );
 
     } catch (e) {
       return res.status( 400 ).send( 'Bad request' );
