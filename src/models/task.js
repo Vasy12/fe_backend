@@ -5,30 +5,30 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       validate: {
         notEmpty: true,
-        isNull: false,
       }
     },
     deadline: {
       type: DataTypes.DATE,
       validate: {
-        isNull: false,
         isDate: true,
       }
     },
     userId: {
       type: DataTypes.INTEGER,
-      validate: {
-        isNull: false,
-      }
+      allowNull: false,
     },
+
     isDone: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
     files: DataTypes.ARRAY( DataTypes.STRING )
   }, {} );
+
   Task.associate = function (models) {
-    // associations can be defined here
+    Task.belongsTo( models.User, {
+      foreignKey: 'userId',
+    } );
   };
   return Task;
 };

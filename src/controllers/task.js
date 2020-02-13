@@ -4,13 +4,12 @@ class TaskController {
 
   createTask = async (req, res, next) => {
     try {
-      const createdTask = await Task.create( {
-                                               ...req.body,
-                                               userId: req.headers.authorization,
-                                             } );
+      debugger;
+      req.body.userId = req.headers.authorization;
+      const createdTask = await Task.create( req.body );
       res.send( createdTask );
     } catch (e) {
-      return res.status( 400 ).send( 'Bad request' );
+      return res.status( 400 ).send( e );
     }
   };
 
