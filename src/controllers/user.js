@@ -9,11 +9,11 @@ class UserController {
 
   createUser = async (req, res, next) => {
     try {
-      const userData = await this._controller.create( req.body ).get();
+      const userData = (await this._controller.create( req.body )).get();
       delete userData.password;
       res.status( 201 ).send( userData );
     } catch (e) {
-      return res.status( 400 ).send( 'Bad request' );
+      next( e );
     }
   };
 
@@ -21,7 +21,7 @@ class UserController {
     try {
       res.send( `${await this._controller.delete( req.params.id )}` );
     } catch (e) {
-      return res.status( 400 ).send( 'Bad request' );
+      next( e );
     }
   };
 
@@ -34,18 +34,18 @@ class UserController {
         }
       } ) );
     } catch (e) {
-      return res.status( 400 ).send( 'Bad request' );
+      next( e );
     }
   };
 
   updateUser = async (req, res, next) => {
     try {
-      const userData = await this._controller.update( req.params.id, req.body ).get();
+      const userData = (await this._controller.update( req.params.id, req.body )).get();
       delete userData.password;
       res.send( userData );
 
     } catch (e) {
-      return res.status( 400 ).send( 'Bad request' );
+      next( e );
     }
   };
 
