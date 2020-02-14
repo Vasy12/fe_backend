@@ -1,14 +1,22 @@
 const express = require( 'express' );
+const { checkAuthorization } = require( '../middlewares/authorization' );
 const { ApplicationError } = require( '../utils/errors' );
 const { UserController, TaskController } = require( '../controllers' );
 
 const router = express.Router();
 
+router.use( checkAuthorization );
 router.route( '/user(/:id)?' )
       .post( UserController.createUser )
       .get( UserController.getUserById )
-      .patch( UserController.updateUser )
-      .delete( UserController.deleteUser );
+      .patch( UserController.updateUserById )
+      .delete( UserController.deleteUserById );
+
+router.route( '/task(/:id)?' )
+      .post( TaskController.createTask )
+      .get( TaskController.getTaskById )
+      .patch( TaskController.updateTaskById )
+      .delete( TaskController.deleteTaskById );
 
 router.use( (err, req, res, next) => {
   if (err instanceof ApplicationError) {

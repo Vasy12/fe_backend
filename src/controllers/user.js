@@ -17,7 +17,7 @@ class UserController {
     }
   };
 
-  deleteUser = async (req, res, next) => {
+  deleteUserById = async (req, res, next) => {
     try {
       res.send( `${await this._controller.delete( req.params.id )}` );
     } catch (e) {
@@ -39,7 +39,7 @@ class UserController {
     }
   };
 
-  updateUser = async (req, res, next) => {
+  updateUserById = async (req, res, next) => {
     try {
       const userData = (await this._controller.update( req.params.id, req.body )).get();
       delete userData.password;

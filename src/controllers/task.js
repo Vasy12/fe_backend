@@ -18,7 +18,7 @@ class TaskController {
     }
   };
 
-  deleteTask = async (req, res, next) => {
+  deleteTaskById = async (req, res, next) => {
     try {
       res.send( {
                   isDeleted: (await this._controller.delete( req.params.id )) === '1'
@@ -28,15 +28,15 @@ class TaskController {
     }
   };
 
-  getTask = async (req, res, next) => {
+  getTaskById = async (req, res, next) => {
     try {
       res.send( await this._controller.read( req.params.id ) );
     } catch (e) {
-      next( new Error() );
+      next( e );
     }
   };
 
-  updateTask = async (req, res, next) => {
+  updateTaskById = async (req, res, next) => {
     try {
 
       res.send( await this._controller.update( req.params.id, req.body ) );
