@@ -32,7 +32,7 @@ class TaskController {
     try {
       res.send( await this._controller.read( req.params.id ) );
     } catch (e) {
-      next( e );
+      next( new Error() );
     }
   };
 
