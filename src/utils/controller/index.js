@@ -1,3 +1,5 @@
+const { BadRequestError, ResourceNotFoundError } = require( './../errors' );
+
 class Controller {
 
   constructor (model) {
@@ -13,7 +15,7 @@ class Controller {
     if (newInstance) {
       return newInstance;
     }
-    throw new Error();
+    throw new BadRequestError();
   };
   read = async (id, options = {}) => {
     const instance = await this.model.findByPk( id, options );
@@ -32,7 +34,7 @@ class Controller {
     if (updatedRowsCount) {
       return updatedRows[0];
     }
-    throw new Error();
+    throw new ResourceNotFoundError( this.model.name );
   };
   delete = async (id) => {
     const deletedRowsCount = await this.model.destroy( {
@@ -43,7 +45,7 @@ class Controller {
     if (deletedRowsCount) {
       return deletedRowsCount;
     }
-    throw new Error();
+    throw new ResourceNotFoundError( this.model.name );
   };
 
 }

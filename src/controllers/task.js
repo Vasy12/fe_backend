@@ -9,9 +9,12 @@ class TaskController {
 
   createTask = async (req, res, next) => {
     try {
-      res.send( await this._controller.create( req.body ) );
+      res.send( await this._controller.create( {
+                                                 ...req.body,
+                                                 userId: req.authorizationData.id
+                                               } ) );
     } catch (e) {
-      return res.status( 400 ).send( e );
+      next( e );
     }
   };
 
@@ -21,7 +24,7 @@ class TaskController {
                   isDeleted: (await this._controller.delete( req.params.id )) === '1'
                 } );
     } catch (e) {
-      return res.status( 400 ).send( 'Bad request' );
+      next( e );
     }
   };
 
@@ -29,7 +32,7 @@ class TaskController {
     try {
       res.send( await this._controller.read( req.params.id ) );
     } catch (e) {
-      return res.status( 400 ).send( 'Bad request' );
+      next( e );
     }
   };
 
@@ -39,7 +42,7 @@ class TaskController {
       res.send( await this._controller.update( req.params.id, req.body ) );
 
     } catch (e) {
-      return res.status( 400 ).send( 'Bad request' );
+      next( e );
     }
   };
 

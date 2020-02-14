@@ -44,7 +44,6 @@ class UserController {
       const userData = (await this._controller.update( req.params.id, req.body )).get();
       delete userData.password;
       res.send( userData );
-
     } catch (e) {
       next( e );
     }

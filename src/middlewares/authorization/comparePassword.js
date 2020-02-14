@@ -1,4 +1,5 @@
 const { User } = require( '../../models' );
+const { ForbiddenError } = require( '../../utils/errors' );
 const bcrypt = require( 'bcrypt' );
 
 module.exports = async (req, res, next) => {
@@ -14,8 +15,7 @@ module.exports = async (req, res, next) => {
     if (await bcrypt.compare( req.body.password, req.user.password )) {
       return next();
     }
-    return res.status( 403 ).send( 'Invalid password.' );
-
+    next( new ForbiddenError() );
   } catch (e) {
     next( e );
   }
