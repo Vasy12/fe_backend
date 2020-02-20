@@ -37,7 +37,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     profilePicture: {
       type: DataTypes.STRING,
-      unique: true,
       allowNull: true,
     }
   }, {} );
