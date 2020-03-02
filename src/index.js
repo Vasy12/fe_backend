@@ -9,6 +9,6 @@ app.use( express.json() );
 
 app.use( express.static( path.resolve( __dirname, '../public' ) ) );
 
-app.use( router );
+app.use( '/api', router );
 
 app.listen( PORT, () => console.log( `Example app listening on port ${PORT}!` ) );

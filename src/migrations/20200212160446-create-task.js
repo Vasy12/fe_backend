@@ -11,10 +11,16 @@ module.exports = {
       value: {
         type: Sequelize.STRING,
         allowNull: false,
+        validate: {
+          notEmpty: true,
+        }
       },
       deadline: {
         type: Sequelize.DATE,
         allowNull: false,
+        validate: {
+          isDate: true,
+        }
       },
       userId: {
         type: Sequelize.INTEGER,

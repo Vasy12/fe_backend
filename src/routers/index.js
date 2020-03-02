@@ -1,34 +1,22 @@
 const express = require( 'express' );
-const { checkAuthorization } = require( '../middlewares/authorization' );
-const { ApplicationError } = require( '../utils/errors' );
-const { UserController, TaskController } = require( '../controllers' );
+const errorHandlers = require( './../middlewares/errorHandler' );
 const adminRouter = require( './admin.js' );
+const userRouter = require( './user.js' );
+const taskRouter = require( './task.js' );
+const authorizationRoute = require( './authorization.js' );
+const { checkAuthorization } = require( './../middlewares/authorization' );
 const router = express.Router();
 
-/*router.use( checkAuthorization );*/
+router.use( checkAuthorization );
 
+router.use( '/authorization', authorizationRoute );
 router.use( '/admin', adminRouter );
+router.use( userRouter );
+router.use( taskRouter );
 
-router.route( '/users' )
-      .get( UserController.getAllUsers );
-
-router.route( '/user(/:id)?' )
-      .post( UserController.createUser )
-      .get( UserController.getUserById )
-      .patch( UserController.updateUserById )
-      .delete( UserController.deleteUserById );
-
-router.route( '/task(/:id)?' )
-      .post( TaskController.createTask )
-      .get( TaskController.getTaskById )
-      .patch( TaskController.updateTaskById )
-      .delete( TaskController.deleteTaskById );
-
-router.use( (err, req, res, next) => {
-  if (err instanceof ApplicationError) {
-    return res.status( err.status ).send( err.message );
-  }
-  return next( err );
-} );
+router.use( errorHandlers.handleValidationError,
+            errorHandlers.handleApplicationError,
+            errorHandlers.handleSequelizeError,
+);
 
 module.exports = router;
