@@ -45,7 +45,20 @@ class TaskController {
       next( e );
     }
   };
+  getUserTasks = async (req, res, next) => {
+    try {
+      const userTasks = await Task.findAll( {
+                                              where: {
+                                                userId: req.authorizationData.id,
+                                              },
+                                              order: [['createdAt', 'DESC']]
+                                            } );
 
+      res.send( userTasks );
+    } catch (e) {
+      next( e );
+    }
+  };
 }
 
 module.exports = new TaskController();
