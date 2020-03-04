@@ -1,6 +1,10 @@
 const express = require( 'express' );
 const taskRouter = express.Router();
 const { TaskController } = require( '../controllers' );
+const { checkAuthorization } = require( '../middlewares/authorization' );
+
+taskRouter.use( checkAuthorization );
+
 
 taskRouter.route( '/tasks' )
           .get( TaskController.getUserTasks );

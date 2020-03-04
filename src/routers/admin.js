@@ -6,7 +6,7 @@ adminRouter.route( '/users' )
            .get( async (req, res, next) => {
              try {
                const users = await User.findAll( {
-                                                   limit: req.query.limit || 20,
+                                                   limit: req.query.limit || 40,
                                                    offset: req.query.offset || 0,
                                                    attributes: {
                                                      exclude: ['password']

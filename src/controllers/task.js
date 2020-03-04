@@ -51,6 +51,7 @@ class TaskController {
                                               where: {
                                                 userId: req.authorizationData.id,
                                               },
+                                              limit: 10,
                                               order: [['createdAt', 'DESC']]
                                             } );
 
